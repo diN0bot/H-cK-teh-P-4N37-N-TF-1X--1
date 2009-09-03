@@ -1,0 +1,5 @@
+*.pyc
+settings.py
+movies_i_want_to_watch
+the_log
+example.py

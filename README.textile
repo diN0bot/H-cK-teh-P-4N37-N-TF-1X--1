@@ -1,0 +1,72 @@
+
+h2. Dependences
+
+h3. django
+
+Django conveniently has simplejson and a nice send_mail interface. eit.
+
+bq. http://djangoproject.com
+
+h2. Included External Libs
+
+h3. oauth
+
+python2.5 does not come with oauth, hence oauth.py is included
+
+h3. pyflix
+
+Netflix.py comes from the pyflix project
+
+bq. http://code.google.com/p/pyflix/
+
+h2. Instruction for Installation and Running
+
+h3. Checkout code from git repository
+
+bq. http://github.com/diN0bot/H-cK-teh-P-4N37-N-TF-1X--1/
+
+h3. Get a NetFlix developer account
+
+bq. http://developer.netflix.com/docs/REST_API_Conventions#0_37461 
+
+h3. Create two files inside repo directory:
+
+bq. settings.py
+
+Past the following code into settings.py and specify the APP_NAME, API_KEY and API_SECRET appropriate for your developer account.
+
+pre.. 
+APP_NAME   = ''
+API_KEY    = ''
+API_SECRET = ''
+CALLBACK   = ''
+
+USER = {
+        'request': {
+                'key': '',
+                'secret': ''
+        },
+        'access': {
+                'key': '',
+                'secret': ''
+        }
+}
+
+bq. movies_i_want_to_watch
+
+List the titles of movies you want to watch, one title per line. For example
+
+pre..
+
+Hackers
+Pulp Fiction
+Oliver!
+
+h3. Run generate_user_keys.py
+
+The generate_user_keys script generates settings.USER request and access values. Follow the instructions it provides.
+
+bq. python generate_user_keys.py
+
+
+
