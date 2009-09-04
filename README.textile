@@ -8,7 +8,7 @@ bq. Movies cannot be removed from the queue
 
 We currently have 250 movies in our queue, down from 450 a year ago. We have 3 discs making the rounds, getting returned every couple of weeks.
 
-What this means is that queue ordering is crucial. If you want any hope of viewing a movie before you move out you had better move that movie to the #1 position. Constantly.
+What this means is that queue ordering is crucial. To have any hope of viewing a movie before one moves out one had better move that movie to the #1 position. Constantly.
 
 h2. Rising Action
 
@@ -98,7 +98,6 @@ p. *movies_i_want_to_watch*
 List the titles of movies you want to watch, one title per line. For example
 
 pre..
-
 Hackers
 Pulp Fiction
 Oliver!
@@ -112,3 +111,14 @@ bq. python generate_user_keys.py
 h3. Run the script!!
 
 bq. python make_me_number_one.py
+
+I've added mine as a cron job on my server. Make sure to set appropriate environment variables at the top of the crontab. For example
+
+pre..
+
+PYTHONPATH=/var/sites/H-cK-teh-P-4N37-N-TF-1X--1/
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+DJANGO_SETTINGS_MODULE=settings
+
+# min (0-59)    hour (0-23)     day of month (1-31)     month (1-12)    day of week (0-6, 0=Sunday)
+*/10        *       *       *       *       python /var/sites/H-cK-teh-P-4N37-N-TF-1X--1/make_me_number_one.py
