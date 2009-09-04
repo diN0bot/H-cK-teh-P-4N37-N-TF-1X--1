@@ -75,8 +75,10 @@ def _log(logfile, message, send_email=False):
     msg = "%s: %s\n" % (datetime.datetime.now(), message)
     email_msg = """
 -~= %s =~-
-y0Uve b33n p4wnd bY #1 F!rs1 in 1!ne
 %s
+\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+y0Uve b33n p4wnd bY #1 F!rs1 in 1!ne
+http://github.com/diN0bot/H-cK-teh-P-4N37-N-TF-1X--1/
 """ % (datetime.datetime.now(), message)
     email_sbj = "H$cK teh P!4N37!!1"
     # write to file
