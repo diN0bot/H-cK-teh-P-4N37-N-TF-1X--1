@@ -12,9 +12,9 @@ I wrote this script to monitor our Netflix queue and ensure that the movie I wan
 
 The script has places of goodness and places of hackery. Maybe you'll find it useful. (I can only hope we don't actually live together, of course)
 
- In an ideal system, one that poses far larger distractions than I can afford right now, this script would become an honest web app that sits on top of our Netflix queue and permits each housemate to spend limited points managing the queue. Maybe after that house meeting where we agree to clear the queue. Or maybe the current situation is exactly how we like it.
+In an ideal system, one that poses far larger distractions than I can afford right now, this script would become an honest web app that sits on top of our Netflix queue and permits each housemate to spend limited points managing the queue. Maybe after that house meeting where we agree to clear the queue. Or maybe the current situation is exactly how we like it.
  
- h2. Features
+h2. Features
  
 The script allows you to specify your own private queue of movies. It keeps the top movie in your private queue at the top of the Netflix queue.
 
