@@ -115,7 +115,7 @@ def make_number_one(netflix, title, log, watch_again_is_ok=True):
     # detect if movie is at home
     at_home = _at_home(netflix, bestmatch)
     if at_home:
-        _log(log, "%s is on its way to the B$DH4U5 OMGSQUEEL!!!1" % bestmatch["title"]["regular"], send_email=True, private=False)
+        _log(log, "T74XX N3TF1!X!! \"%s\" is on its way to the B$DH4U5!!!1" % bestmatch["title"]["regular"], send_email=True, private=False)
         return False
     
     if not watch_again_is_ok:
