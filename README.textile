@@ -113,10 +113,8 @@ bq. python make_me_number_one.py
 
 I've added mine as a cron job on my server. Make sure to set appropriate environment variables at the top of the crontab. For example
 
-pre.
-PYTHONPATH=/var/sites/H-cK-teh-P-4N37-N-TF-1X--1/
+bq. PYTHONPATH=/var/sites/H-cK-teh-P-4N37-N-TF-1X--1/
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 DJANGO_SETTINGS_MODULE=settings
-
 # min (0-59)    hour (0-23)     day of month (1-31)     month (1-12)    day of week (0-6, 0=Sunday)
 */10        *       *       *       *       python /var/sites/H-cK-teh-P-4N37-N-TF-1X--1/make_me_number_one.py
