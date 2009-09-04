@@ -71,8 +71,11 @@ def _find_best_match(netflix, title):
     # for now, the first match is the right movie
     return matches[0]
 
-def _log(logfile, message, send_email=False):
+def _log(logfile, message, send_email=False, private=True):
     msg = "%s: %s\n" % (datetime.datetime.now(), message)
+    # write to file
+    logfile.write(msg)
+    
     email_msg = """
 -~= %s =~-
 %s
@@ -81,28 +84,18 @@ y0Uve b33n p4wnd bY #1 F!rs1 in 1!ne
 http://github.com/diN0bot/H-cK-teh-P-4N37-N-TF-1X--1/
 """ % (datetime.datetime.now(), message)
     email_sbj = "H$cK teh P!4N37!!1"
-    # write to file
-    logfile.write(msg)
     # send email if specified
     if send_email:
         from django.core.mail import send_mail
+        if private:
+            recips = settings.PRIVATE_EMAIL_RECIPIENTS
+        else:
+            recips = settings.PUBLIC_EMAIL_RECIPIENTS
         send_mail(email_sbj,
                   email_msg,
                   "#1F!rs1in1!ne@H4cKtehP14N37.com",
-                  #"#1_F!rs1_in_1!ne@H$cK_teh_P!4N37!!1.43vr",
-                  ["badhouse@mit.edu",
-                   "berglar@mit.edu",
-                   "clay@bilumi.org",
-                   "lucy@bilumi.org",
-                   "alex@nublabs.com",
-                   "ineslsantos@gmail.com",
-                   "dfring@gmail.com",
-                   "paulina@csail.mit.edu",
-                   "lsz@csail.mit.edu",
-                   "payaam@gmail.com",
-                   "pbuchak@mit.edu",
-                   "wbosworth@gmail.com"],
-                  fail_silently=False)
+                  recips,
+                  fail_silently=True)
     
 def make_number_one(netflix, title, log, watch_again_is_ok=True):
     """
@@ -116,21 +109,50 @@ def make_number_one(netflix, title, log, watch_again_is_ok=True):
     # search for movie id for string title
     bestmatch = _find_best_match(netflix, title)
     if not bestmatch:
-        _log(log, "match not found for %s" % title, send_email=False)
+        _log(log, "match not found for %s" % title, send_email=False, private=True)
         return False
     
     # detect if movie is at home
     at_home = _at_home(netflix, bestmatch)
     if at_home:
-        _log(log, "%s is on its way to the B$DH4U5 OMGSQUEEL!!!1" % bestmatch["title"]["regular"], send_email=True)
+        _log(log, "%s is on its way to the B$DH4U5 OMGSQUEEL!!!1" % bestmatch["title"]["regular"], send_email=True, private=False)
         return False
     
     if not watch_again_is_ok:
         # detect if have already watched
         watched_before = _watched_before(netflix, bestmatch)
         if watched_before:
-            _log(log, "%s was watched before" % bestmatch["title"]["regular"], send_email=False)
+            _log(log, "%s was watched before" % bestmatch["title"]["regular"], send_email=False, private=True)
             return False
+
+    # we're limited to 4 calls a second so...
+    time.sleep(1)
+    
+    # for fun, see if movie is already in queue
+    queue = NetflixUserQueue(netflix.user)
+    found = False
+    for item in queue.getAvailable(maxResults=500)["queue"]["queue_item"]:
+        if _movie_match(item, bestmatch):
+            found = True
+            if item["position"] != "1":
+                _log(log, "%s was at position %s" % (bestmatch["title"]["regular"],
+                                                     item["position"]),
+                                                     send_email=True,
+                                                     private=True)
+                break
+    if not found:
+        _log(log, "%s added to queue" % bestmatch["title"]["regular"],
+                                        send_email=True,
+                                        private=True)
+    
+    """
+    import simplejson
+    movie_id = re.findall("http://.*/(\d+)$", bestmatch["id"])
+    if movie_id:
+        movie_id = movie_id[0]
+        #print "BEST MATHC", simplejson.dumps(bestmatch, indent=4)
+        print "GET AV T", simplejson.dumps(queue.getAvailableTitle(movie_id), indent=4)
+    """
     
     # add title to first place
     queue = NetflixUserQueue( netflix.user )
@@ -146,10 +168,10 @@ if __name__ == '__main__':
     netflix = NetflixClient(settings.APP_NAME, settings.API_KEY, settings.API_SECRET, settings.CALLBACK)
     netflix.user = NetflixUser(settings.USER, netflix)
     
-    LOG = "/var/sites/H-cK-teh-P-4N37-N-TF-1X--1/the_log"
+    LOG = "%s/the_log" % settings.PROJECT_HOME 
     log = open(LOG, 'a')
     
-    FILENAME = "/var/sites/H-cK-teh-P-4N37-N-TF-1X--1/movies_i_want_to_watch"
+    FILENAME = "%s/movies_i_want_to_watch" % settings.PROJECT_HOME
     f = open(FILENAME, 'r')
     keepers = []
     deed_is_done = False

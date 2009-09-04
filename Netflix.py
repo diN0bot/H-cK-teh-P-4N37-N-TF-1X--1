@@ -288,7 +288,22 @@ class NetflixUserQueue:
             return []
         else:
             return info
-            
+    
+    def getAvailableTitle(self, movie_id, type="disc"):
+        requestUrl = '/users/%s/queues/%s/available/%s/' % (
+                                    self.user.accessToken.key,
+                                    type,
+                                    movie_id)
+        try:
+            print requestUrl
+            info = simplejson.loads(self.client._getResource( 
+                                    requestUrl,
+                                    token=self.user.accessToken ))
+        except:
+            return []
+        else:
+            return info
+    
     def getAvailable(self, sort=None, startIndex=None, 
                                     maxResults=None, updatedMin=None,
                                     type='disc'):
@@ -370,8 +385,36 @@ class NetflixUserQueue:
                                              requestUrl, 
                                              token=accessToken,
                                              parameters=parameters )
-        print "\n ADD TITLE respnse"
-        print response
+        return response
+
+
+    def getTitle(self, discInfo=[], urls=[], type='disc'):
+        accessToken=self.user.accessToken
+        parameters={}
+
+        if not isinstance(accessToken, oauth.OAuthToken):
+            accessToken = oauth.OAuthToken( 
+                                    accessToken['key'],
+                                    accessToken['secret'] )
+
+        requestUrl = '/users/%s/queues/disc' % (accessToken.key)
+        if not urls:
+            for disc in discInfo:
+                urls.append( disc['id'] )
+        parameters['title_ref'] = ','.join(urls)
+
+        if not self.tag:
+            response = self.client._getResource( 
+                                                requestUrl, 
+                                                token=accessToken )
+            response = simplejson.loads(response)
+            self.tag = response["queue"]["etag"]
+            
+        parameters['etag'] = self.tag
+        response = self.client._getResource( 
+                                            requestUrl, 
+                                            token=accessToken,
+                                            parameters=parameters )
         return response
 
     def removeTitle(self, id, type='disc'):
@@ -470,9 +513,16 @@ class NetflixClient:
                                     token)
         if (self.verbose):
             print oauthRequest.to_url()
+            
         self.connection.request('GET', oauthRequest.to_url())
         response = self.connection.getresponse()
         return response.read()
+        #if "available" in url:
+        #    print oauthRequest.to_url()
+        #    print
+        #    print response
+        #    print
+        #    print r
     
     def _postResource(self, url, token=None, parameters=None):
         if not re.match('http',url):
