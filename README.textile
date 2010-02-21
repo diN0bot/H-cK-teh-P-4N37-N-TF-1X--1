@@ -1,5 +1,7 @@
 h1.  HaCK teh PLaNET
 
+<img src="http://github.com/diN0bot/H-cK-teh-P-4N37-N-TF-1X--1/raw/master/hackers.jpeg" />
+
 h2. Exposition
 
 I live in a cooperative with 8 other people.  We share a Netflix queue. The only rule is
